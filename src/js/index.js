@@ -71,57 +71,60 @@ function onSearchForm(e) {
 
 
 function renderGallery(images) {
-  // Перевірка чи існує галерея перед вставкою даних
-  if (!elements.gallery) {
-    return;
-  }
+    // Перевірка чи існує галерея перед вставкою даних
+    if (!elements.gallery) {
+        return;
+    }
 
-  const markup = images
-    .map(image => {
-      const {
-        id,
-        largeImageURL,
-        webformatURL,
-        tags,
-        likes,
-        views,
-        comments,
-        downloads,
-      } = image;
-      return `
-            <div class="photo-card">
-                <a href='${largeImageURL}' class="card-link js-card-link">
-                    <img class="photo" src="${webformatURL}" alt="${tags}" loading="lazy" />
-                    <div class="info">
-                        <p class="info-item">
-                        <b>Views</b>
-                        ${views}
-                        </p>
-                        <p class="info-item">
-                        <b>Comments</b>
-                        ${comments}
-                        </p>
-                        <p class="info-item">
-                        <b>Downloads</b>
-                        ${downloads}
-                        </p>
-                    </div>
-                </a>
-            </div>`;
-    })
-    .join('');
+    const markup = images
+        .map(image => {
+        const {
+            id,
+            largeImageURL,
+            webformatURL,
+            tags,
+            likes,
+            views,
+            comments,
+            downloads,
+        } = image;
+        return `
+                <div class="photo-card">
+                    <a href='${largeImageURL}' class="card-link js-card-link">
+                        <img class="photo" src="${webformatURL}" alt="${tags}" loading="lazy" />
+                        <div class="info">
+                            <p class="info-item">
+                            <b>Views</b>
+                            ${views}
+                            </p>
+                            <p class="info-item">
+                            <b>Comments</b>
+                            ${comments}
+                            </p>
+                            <p class="info-item">
+                            <b>Downloads</b>
+                            ${downloads}
+                            </p>
+                        </div>
+                    </a>
+                </div>`;
+        })
+        .join('');
 
-  elements.gallery.insertAdjacentHTML('beforeend', markup);
+    elements.gallery.insertAdjacentHTML('beforeend', markup);
 
-  // Цей код дозволяє автоматично прокручувати сторінку на висоту 2 карток галереї, коли вона завантажується
+    // Цей код дозволяє автоматично прокручувати сторінку на висоту 2 карток галереї, коли вона завантажується
+    if (page === 1) {
+        return
+    }
     const { height: cardHeight } =
         elements.gallery
         .firstElementChild.getBoundingClientRect();
     
-  window.scrollBy({
-    top: cardHeight * 2,
-    behavior: 'smooth',
-  });
+    window.scrollBy({
+        top: cardHeight * 2,
+        behavior: 'smooth',
+    });
 }
 
 function onloadMore() {
@@ -158,5 +161,3 @@ function showLoadMorePage() {
     onloadMore();
   }
 }
-
-// window.addEventListener('scroll', showLoadMorePage);
