@@ -64,7 +64,8 @@ function onSearchForm(e) {
             console.log(error)
         })
     .finally(() => {
-      elements.searchForm.reset();
+        elements.searchForm.reset();
+        window.addEventListener('scroll', showLoadMorePage);
     });
 }
 
@@ -133,11 +134,12 @@ function onloadMore() {
 
       const totalPages = Math.ceil(data.totalHits / perPage);
 
-        if (page > totalPages) {
-          iziToast.warning({
-                position: 'center',
-                message: "We're sorry, but you've reached the end of search results.",
+        if (page >= totalPages) {
+            iziToast.warning({
+                    position: 'center',
+                    message: "We're sorry, but you've reached the end of search results.",
             });
+            window.removeEventListener('scroll', showLoadMorePage);
         }
     })
     .catch(error => console.log(error));
@@ -157,4 +159,4 @@ function showLoadMorePage() {
   }
 }
 
-window.addEventListener('scroll', showLoadMorePage);
+// window.addEventListener('scroll', showLoadMorePage);
