@@ -1,7 +1,48 @@
-.is-hidden {
-  /* display: none !important; */
-  /* visibility: hidden;
-  opacity: 0; */
+/* ============= COMMON STYLES ============= */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+ul,
+ol {
+  padding-left: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+img {
+  display: block;
+}
+
+.list {
+  list-style-type: none;
+}
+
+.link {
+  text-decoration: none;
+  color: currentColor;
+}
+
+button {
+  cursor: pointer;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
+  margin: 30px 8px;
+}
+
+.visually-hidden {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -13,73 +54,30 @@
   clip: rect(0 0 0 0);
   overflow: hidden;
 }
+/* ============= /COMMON STYLES ============= */
 
-.breed-select {
-  max-width: 300px;
-}
-
-.loader {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  display: inline-block;
-  position: relative;
-  border: 3px solid;
-  border-color: #fff #fff transparent transparent;
-  box-sizing: border-box;
-  animation: rotation 1s linear infinite;
-}
-.loader::after,
-.loader::before {
-  content: '';
-  box-sizing: border-box;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  margin: auto;
-  border: 3px solid;
-  border-color: transparent transparent #ff3d00 #ff3d00;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  box-sizing: border-box;
-  animation: rotationBack 0.5s linear infinite;
-  transform-origin: center center;
-}
-.loader::before {
-  width: 32px;
-  height: 32px;
-  border-color: #010101 #010101 transparent transparent;
-  animation: rotation 1.5s linear infinite;
+.is-hidden {
+  visibility: hidden;
+  opacity: 0;
 }
 
-@keyframes rotation {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-@keyframes rotationBack {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(-360deg);
-  }
-}
-
-.cat-info {
-  margin-top: 20px;
+#search-form {
   display: flex;
-  justify-content: left;
-  flex-wrap: wrap;
-  gap: 40px;
+  justify-content: center;
+  padding: 16px;
+  background-color: rgb(126, 126, 212);
 }
 
-.box {
-  width: 300px;
+.photo-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px;
+  max-width: calc((100% - 3 * 40px) / 4);
+  border-radius: 8px;
+  background-color: rgb(219, 243, 252);
+}
+
+.photo {
+  width: 100%;
 }

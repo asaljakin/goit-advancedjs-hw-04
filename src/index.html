@@ -3,17 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>goit-advancedjs-hw-03</title>
+    <title>goit-advancedjs-hw-04</title>
     <link rel="stylesheet" href="./css/styles.css" />
   </head>
   <body>
-    <select class="breed-select is-hidden"></select>
-    <p class="loader is-hidden"></p>
-    <p class="error is-hidden">
-      Oops! Something went wrong! Try reloading the page!
-    </p>
-    <div class="cat-info is-hidden"></div>
-
-    <script src="index.js" type="module"></script>
+    <form class="search-form" id="search-form">
+      <input
+        class="serch-form-input"
+        type="text"
+        name="searchQuery"
+        autocomplete="off"
+        placeholder="Search images..."
+      />
+      <button class="serch-form-btn" type="submit">Search</button>
+    </form>
+    <div class="gallery container">
+      <!-- Картки зображень -->
+    </div>
+    <div class="container">
+      <button type="button" class="load-more is-hidden">Load more</button>
+    </div>
+    <script src="./js/index.js" type="module"></script>
   </body>
 </html>
