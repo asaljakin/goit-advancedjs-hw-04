@@ -23,39 +23,46 @@ const perPage = 40;
 elements.searchForm.addEventListener('submit', onSearchForm);
 
 function onSearchForm(e) {
-  e.preventDefault();
-  page = 1;
-  query = e.currentTarget.elements.searchQuery.value.trim();
-  elements.gallery.innerHTML = '';
+    e.preventDefault();
+    page = 1;
+    query = e.currentTarget.elements.searchQuery.value.trim();
+    elements.gallery.innerHTML = '';
 
     if (!e.currentTarget.elements.searchQuery.value.trim()) {
-      iziToast.error({
-                title: 'Error',
-                position: 'center',
-                message: 'The search string cannot be empty. Please specify your search query.',
-            });
-    return;
-  }
+        iziToast.error({
+            title: 'Error',
+            position: 'center',
+            message: 'The search string cannot be empty. Please specify your search query.',
+        });
+        return;
+    }
 
-  fetchImages(query, page, perPage)
-    .then(data => {
-        if (data.totalHits === 0) {
+    fetchImages(query, page, perPage)
+        .then(data => {
+            if (data.totalHits === 0) {
+                iziToast.error({
+                    title: 'Error',
+                    position: 'center',
+                    message: 'Sorry, there are no images matching your search query. Please try again.',
+                });
+        
+            } else {
+                renderGallery(data.hits);
+                simpleLightBox = new SimpleLightbox('.gallery a').refresh();
+                iziToast.success({
+                    position: 'center',
+                    message: `Hooray! We found ${data.totalHits} images.`,
+                });
+            }
+        })
+        .catch(error => {
             iziToast.error({
                 title: 'Error',
                 position: 'center',
-                message: 'Sorry, there are no images matching your search query. Please try again.',
+                message: `${error.message} Something went wrong!`,
             });
-        
-      } else {
-            renderGallery(data.hits);
-            simpleLightBox = new SimpleLightbox('.gallery a').refresh();
-            iziToast.success({
-                position: 'center',
-                message: `Hooray! We found ${data.totalHits} images.`,
-            });
-      }
-    })
-    .catch(error => console.log(error))
+            console.log(error)
+        })
     .finally(() => {
       elements.searchForm.reset();
     });
