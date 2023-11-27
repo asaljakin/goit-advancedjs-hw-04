@@ -22,13 +22,13 @@ const perPage = 40;
 
 elements.searchForm.addEventListener('submit', onSearchForm);
 
-function onSearchForm(e) {
+async function onSearchForm(e) {
     e.preventDefault();
     page = 1;
     query = e.currentTarget.elements.searchQuery.value.trim();
     elements.gallery.innerHTML = '';
 
-    if (!e.currentTarget.elements.searchQuery.value.trim()) {
+    if (!query) {
         iziToast.error({
             title: 'Error',
             position: 'center',
@@ -36,37 +36,41 @@ function onSearchForm(e) {
         });
         return;
     }
-
-    fetchImages(query, page, perPage)
-        .then(data => {
-            if (data.totalHits === 0) {
-                iziToast.error({
-                    title: 'Error',
-                    position: 'center',
-                    message: 'Sorry, there are no images matching your search query. Please try again.',
-                });
-        
-            } else {
-                renderGallery(data.hits);
-                simpleLightBox = new SimpleLightbox('.gallery a').refresh();
-                iziToast.success({
-                    position: 'center',
-                    message: `Hooray! We found ${data.totalHits} images.`,
-                });
-            }
-        })
-        .catch(error => {
+    try {
+        const data = await fetchImages(query, page, perPage);
+        if (data.totalHits === 0) {
             iziToast.error({
                 title: 'Error',
                 position: 'center',
-                message: `${error.message} Something went wrong!`,
+                message: 'Sorry, there are no images matching your search query. Please try again.',
             });
-            console.log(error)
-        })
-    .finally(() => {
+        } else {
+            renderGallery(data.hits);
+            simpleLightBox = new SimpleLightbox('.gallery a').refresh();
+            iziToast.success({
+                position: 'center',
+                message: `Hooray! We found ${data.totalHits} images.`,
+            });
+        }
+        const totalPages = Math.ceil(data.totalHits / perPage);
+        if (totalPages <= page) {
+            iziToast.warning({
+                position: 'bottomCenter',
+                message: "We're sorry, but you've reached the end of search results.",
+            });
+        } else {
+            window.addEventListener('scroll', showLoadMorePage);
+        }
+    } catch(error) {
+        iziToast.error({
+            title: 'Error',
+            position: 'center',
+            message: `${error.message} Something went wrong!`,
+        });
+        console.log(error)
+    } finally {
         elements.searchForm.reset();
-        window.addEventListener('scroll', showLoadMorePage);
-    });
+    };
 }
 
 
@@ -127,25 +131,29 @@ function renderGallery(images) {
     });
 }
 
-function onloadMore() {
-  page += 1;
-  simpleLightBox.destroy();
-  fetchImages(query, page, perPage)
-    .then(data => {
-      renderGallery(data.hits);
-      simpleLightBox = new SimpleLightbox('.gallery a').refresh();
-
-      const totalPages = Math.ceil(data.totalHits / perPage);
-
+async function onloadMore() {
+    page += 1;
+    simpleLightBox.destroy();
+    try {
+        const data = await fetchImages(query, page, perPage);
+        renderGallery(data.hits);
+        simpleLightBox = new SimpleLightbox('.gallery a').refresh();
+        const totalPages = Math.ceil(data.totalHits / perPage);
         if (page >= totalPages) {
             iziToast.warning({
-                    position: 'center',
-                    message: "We're sorry, but you've reached the end of search results.",
+                position: 'bottomCenter',
+                message: "We're sorry, but you've reached the end of search results.",
             });
             window.removeEventListener('scroll', showLoadMorePage);
         }
-    })
-    .catch(error => console.log(error));
+    } catch (error) {
+        iziToast.error({
+            title: 'Error',
+            position: 'center',
+            message: `${error.message} Something went wrong!`,
+        });
+        console.log(error);
+    }
 }
 
 function checkIfEndOfPage() {
